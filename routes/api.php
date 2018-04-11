@@ -16,3 +16,8 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// 用參數判斷是 email 或是手機註冊
+Route::post('/member/register', 'MemberController@register');
+// 用路徑判斷是 email 或是手機註冊
+Route::post('/member/register/{type}', 'MemberController@register2');
