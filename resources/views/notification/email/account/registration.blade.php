@@ -8,7 +8,7 @@
 </head>
 <body>
     @php
-        echo substr($email, 0, strpos($email, '@'));
+        echo substr($account, 0, strpos($account, '@'));
     @endphp
     @if (empty($sex) === false)
         @if ((int)$sex === 1)

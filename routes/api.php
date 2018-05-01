@@ -19,8 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 // 用路徑判斷是 email 或是手機註冊
 Route::post('/member/register/{type}', 'MemberController@register');
-// 用參數判斷是 email 或是手機註冊
-Route::post('/member/register', 'MemberController@register2');
 
 // 偽裝 email 寄信 API 回傳值
 Route::post('/email', function () {
