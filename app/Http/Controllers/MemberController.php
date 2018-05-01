@@ -104,7 +104,7 @@ class MemberController extends Controller
                 case 'email': // email 註冊的話寄信
                     $post = [
                         'email' => $request->input('email'),
-                        'from' => $request->input('service@test.com'),
+                        'from' => 'service@test.com',
                         'title' => '歡迎您成為 XXXX 網站的會員',
                         'body' => view('notification.email.account.registration', $passData)->render()
                     ];
@@ -210,7 +210,7 @@ class MemberController extends Controller
                 case 1: // email 註冊的話寄信
                     $post = [
                         'email' => $request->input('email'),
-                        'from' => $request->input('service@test.com'),
+                        'from' => 'service@test.com',
                         'title' => '歡迎您成為 XXXX 網站的會員',
                         'body' => view('notification.email.account.registration', $passData)->render()
                     ];
