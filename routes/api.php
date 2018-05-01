@@ -21,3 +21,20 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/member/register', 'MemberController@register');
 // 用路徑判斷是 email 或是手機註冊
 Route::post('/member/register/{type}', 'MemberController@register2');
+
+
+Route::post('/email', function () {
+    return response()->json([
+        'status' => 200,
+        'message' => 'success',
+        'data' => []
+    ]);
+});
+
+Route::post('/sms', function () {
+    return response()->json([
+        'status' => 200,
+        'message' => 'success',
+        'data' => []
+    ]);
+});
