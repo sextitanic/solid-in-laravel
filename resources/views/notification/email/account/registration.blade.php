@@ -1,3 +1,4 @@
+@inject('format', 'App\Presenters\Notify\Email')
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,15 +8,9 @@
     <title>Document</title>
 </head>
 <body>
-    @php
-        echo substr($account, 0, strpos($account, '@'));
-    @endphp
+    {{ $format->name($account) }}
     @if (empty($sex) === false)
-        @if ((int)$sex === 1)
-        先生
-        @elseif ((int)$sex === 2)
-        小姐
-        @endif
+        {{ $format->sex($sex) }}
     @endif
     您好，請點選以下連結啟用帳戶
     <br>
