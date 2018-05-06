@@ -19,25 +19,26 @@ class MemberController extends Controller
      */
     public function register(Request $request, string $type)
     {
+        // 依照傳進來的路徑來呼叫要使用的物件
         $class = 'App\Services\Account\Registration\\' . ucfirst($type);
         if (class_exists($class) === false) {
             return $this->response(422, 'Class ' . $class . ' Not exist.');
         }
-        
         $account = new $class();
 
         try {
             DB::beginTransaction();
-    
+            // 會員註冊
             $memberId = $account->register($request->input());
             
+            // 如果順利註冊，就取得啟用驗證碼
             if (is_int($memberId)) {
                 $activateCode = $account->getActivateCode();
             } else {
                 Log::error('新增會員失敗：' . $e->getMessage());
                 throw new \Exception('新增會員失敗');
             }
-    
+            // 寫入會員啟用資料表
             $account->activate($memberId, $activateCode);
 
             DB::commit();
@@ -47,6 +48,7 @@ class MemberController extends Controller
         }
 
         try {
+            // 把啟用驗證碼 merge 進 Request 的物件裡
             $request->merge([
                 'code' => $activateCode
             ]);

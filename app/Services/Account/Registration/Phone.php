@@ -15,11 +15,11 @@ class Phone extends BaseRegistration
     {
         parent::validate($input);
 
-        $rules['account'] = 'required|regex:/^09\d{8}$/';
+        $rules['account'] = 'required|regex:/^09\d{8}$/|unique:member,reg_phone';
 
         $validator = validator($input, $rules);
         if ($validator->fails()) {
-            throw new App\Exceptions\InvalidParameterException($validator->errors()->first());
+            throw new \App\Exceptions\InvalidParameterException($validator->errors()->first());
         }
 
         return true;
@@ -74,6 +74,12 @@ class Phone extends BaseRegistration
             'content' => view('notification.sms.account.registration', $data)->render()
         ];
 
-        return $notify->post('/sms', $post);
+        $result = $notify->post('/sms', $post);
+
+        if ($result['status'] != 200) {
+            throw new \App\Exceptions\ApiException('寄送 ' . $data['account'] . ' 簡訊失敗');
+        }
+
+        return true;
     }
 }

@@ -22,7 +22,7 @@ abstract class BaseRegistration
         $input['type'] = $this->type;
 
         $rules = [
-            'password' => 'required|string|min:8|max:16',
+            'password' => 'required|string|min:8|max:16', // 密碼必填，且字數在 8 ~ 16 之間
             'sex' => 'nullable|in:1,2',
             'type' => 'required|integer'
         ];

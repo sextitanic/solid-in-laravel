@@ -15,16 +15,26 @@ class Email extends BaseRegistration
     {
         parent::validate($input);
 
-        $rules['account'] = 'required|email';
+        $rules['account'] = 'required|email|unique:member,reg_email'; // 符合 email 格式且之前不存在 member 資料表內
 
         $validator = validator($input, $rules);
         if ($validator->fails()) {
-            throw new App\Exceptions\InvalidParameterException($validator->errors()->first());
+            throw new \App\Exceptions\InvalidParameterException($validator->errors()->first());
         }
 
         return true;
     }
 
+    /**
+     * 新增會員 email 註冊資料
+     *
+     * @param array $data[
+     *      @var int    $sex      性別
+     *      @var string $password 密碼
+     *      @var string $account  email
+     * ]
+     * @return integer
+     */
     public function register(array $data): int
     {
         $this->validate($data);
@@ -50,6 +60,11 @@ class Email extends BaseRegistration
         return $memberId;
     }
 
+    /**
+     * 取得啟用驗證碼
+     *
+     * @return string
+     */
     public function getActivateCode(): string
     {
         return str_random(64);
@@ -76,6 +91,12 @@ class Email extends BaseRegistration
             'body' => view('notification.email.account.registration', $data)->render()
         ];
 
-        return $notify->post('/email', $post);
+        $result = $notify->post('/email', $post);
+        
+        if ($result['status'] != 200) {
+            throw new \App\Exceptions\ApiException('寄送 email: ' . $data['account'] . ' 失敗');
+        }
+
+        return true;
     }
 }
