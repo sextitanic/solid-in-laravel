@@ -32,12 +32,8 @@ class MemberController extends Controller
             $memberId = $account->register($request->input());
             
             // 如果順利註冊，就取得啟用驗證碼
-            if (is_int($memberId)) {
-                $activateCode = $account->getActivateCode();
-            } else {
-                Log::error('新增會員失敗：' . $e->getMessage());
-                throw new \Exception('新增會員失敗');
-            }
+            $activateCode = $account->getActivateCode();
+            
             // 寫入會員啟用資料表
             $account->activate($memberId, $activateCode);
 
