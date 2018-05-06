@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MemberCreatePost;
+use App\Services\Account\Registration\RegistrationFactory;
 use Log;
 use DB;
 
@@ -18,11 +19,7 @@ class MemberController extends Controller
     public function register(MemberCreatePost $request, string $type)
     {
         // 依照傳進來的路徑來呼叫要使用的物件
-        $class = 'App\Services\Account\Registration\\' . ucfirst($type);
-        if (class_exists($class) === false) {
-            return $this->response(422, 'Class ' . $class . ' Not exist.');
-        }
-        $account = new $class();
+        $account = RegistrationFactory::create($type);
 
         try {
             DB::beginTransaction();
