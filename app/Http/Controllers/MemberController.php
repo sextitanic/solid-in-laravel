@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use DB;
+use App\Http\Requests\MemberCreatePost;
 use Log;
-use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Hash;
+use DB;
 
 class MemberController extends Controller
 {
@@ -17,7 +15,7 @@ class MemberController extends Controller
      * @param string $type
      * @return void
      */
-    public function register(Request $request, string $type)
+    public function register(MemberCreatePost $request, string $type)
     {
         // 依照傳進來的路徑來呼叫要使用的物件
         $class = 'App\Services\Account\Registration\\' . ucfirst($type);
@@ -40,6 +38,11 @@ class MemberController extends Controller
             DB::commit();
         } catch (\Throwable $e) {
             DB::rollBack();
+
+            if ($e instanceof \App\Exceptions\InvalidParameterException) {
+                return $this->response(422, $e->getMessage());
+            }
+
             return $this->response(500, $e->getMessage());
         }
 
