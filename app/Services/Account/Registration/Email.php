@@ -2,10 +2,9 @@
 
 namespace App\Services\Account\Registration;
 
-use DB;
-use Hash;
 use Log;
 use App\Services\Api\Internal\NotifyApi;
+use App\Repositories\MemberRepository;
 
 class Email extends BaseRegistration
 {
@@ -39,23 +38,14 @@ class Email extends BaseRegistration
     {
         $this->validate($data);
 
-        $nowDate = date('Y-m-d H:i:s');
-
         $insertData = [
             'sex' => $data['sex'] ?? null,
             'type' => $this->type,
-            'reg_date' => $nowDate,
-            'updated_at' => $nowDate,
-            'password' => Hash::make($data['password']),
+            'password' => $data['password'],
             'reg_email' => $data['account']
         ];
 
-        try {
-            $memberId = DB::table('member')->insertGetId($insertData);
-        } catch (\Exception $e) {
-            Log::error('新增會員資料失敗：' . $e->getMessage());
-            throw new \App\Exceptions\DatabaseQueryException('新增會員資料失敗：' . $data['account'], 500, $e);
-        }
+        $memberId = $this->member->create($insertData);
 
         return $memberId;
     }

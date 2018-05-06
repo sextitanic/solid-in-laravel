@@ -2,10 +2,7 @@
 
 namespace App\Services\Account\Registration;
 
-use DB;
-use Hash;
 use Log;
-use App\Services\Api\Internal\NotifyApi;
 
 class Phone extends BaseRegistration
 {
@@ -14,7 +11,7 @@ class Phone extends BaseRegistration
     protected function validate(array $input): bool
     {
         parent::validate($input);
-
+        
         $rules['account'] = 'required|regex:/^09\d{8}$/|unique:member,reg_phone';
 
         $validator = validator($input, $rules);
@@ -36,16 +33,11 @@ class Phone extends BaseRegistration
             'type' => $this->type,
             'reg_date' => $nowDate,
             'updated_at' => $nowDate,
-            'password' => Hash::make($data['password']),
+            'password' => $data['password'],
             'reg_phone' => $data['account']
         ];
 
-        try {
-            $memberId = DB::table('member')->insertGetId($insertData);
-        } catch (\Exception $e) {
-            Log::error('新增會員資料失敗：' . $e->getMessage());
-            throw new \App\Exceptions\DatabaseQueryException('新增會員資料失敗：' . $data['account'], 500, $e);
-        }
+        $memberId = $this->member->create($insertData);
 
         return $memberId;
     }

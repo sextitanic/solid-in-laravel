@@ -3,10 +3,20 @@
 namespace App\Services\Account\Registration;
 
 use DB;
+use App\Repositories\MemberRepository;
+use App\Repositories\MemberActivatorRepository;
 
 abstract class BaseRegistration
 {
     protected $type;
+    protected $member;
+    protected $activator;
+
+    public function __construct()
+    {
+        $this->member = new MemberRepository();
+        $this->activator = new MemberActivatorRepository();
+    }
 
     /**
      * 檢查不同註冊狀態的共用傳入參數是否正確
@@ -51,17 +61,7 @@ abstract class BaseRegistration
             'created_at' => date('Y-m-d H:i:s')
         ];
 
-        try {
-            $result = DB::table('member_activator')->insert($insertData);
-    
-            if ($result !== true) {
-                DB::rollBack();
-                throw new \Exception('會員啟用驗證碼新增失敗');
-            }
-        } catch (\Exception $e) {
-            Log::error('新增會員驗證資料失敗：' . $e->getMessage());
-            throw new \App\Exceptions\DatabaseQueryException('新增會員驗證資料失敗', 500, $e);
-        }
+        $result = $this->activator->create($insertData);
 
         return true;
     }
