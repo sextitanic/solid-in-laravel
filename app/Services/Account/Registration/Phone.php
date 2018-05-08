@@ -3,8 +3,10 @@
 namespace App\Services\Account\Registration;
 
 use Log;
+use App\Services\Api\Internal\NotifyApi;
+use App\Services\Account\Registration\Native\Base;
 
-class Phone extends BaseRegistration
+class Phone extends Base
 {
     protected $type = 2;
 

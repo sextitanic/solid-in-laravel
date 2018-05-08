@@ -13,7 +13,9 @@ class Member extends Model
 
     public function setRegEmailAttribute(string $email = null)
     {
-        $this->attributes['reg_email'] = strtolower($email);
+        if (empty($email) === false) {
+            $this->attributes['reg_email'] = strtolower($email);
+        }
     }
 
     public function setPasswordAttribute(string $password = null)

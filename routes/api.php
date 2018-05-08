@@ -19,3 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 // 用路徑判斷是 email 或是手機註冊
 Route::post('/member/register/{type}', 'MemberController@register');
+
+// 第三方註冊
+Route::post('/member/third-party/register/{type}', 'MemberController@thirdPartyRegister');

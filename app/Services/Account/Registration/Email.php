@@ -4,9 +4,9 @@ namespace App\Services\Account\Registration;
 
 use Log;
 use App\Services\Api\Internal\NotifyApi;
-use App\Repositories\MemberRepository;
+use App\Services\Account\Registration\Native\Base;
 
-class Email extends BaseRegistration
+class Email extends Base
 {
     protected $type = 1;
 

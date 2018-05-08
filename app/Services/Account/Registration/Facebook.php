@@ -37,30 +37,14 @@ class Facebook extends BaseRegistration
         return 100; // 固定回傳一個值符合父類別回傳的參數型態
     }
 
-    public function getActivateCode(): string
-    {
-        // facebook 註冊不需要寄送啟用驗證通知，直接回傳空字串
-
-        return '';
-    }
-
     /**
-     * 寫入會員驗證啟用資料表
+     * 寫入資訊到 member_thirdparty 資料表
      *
-     * @param integer $memberId 會員 ID
-     * @param string  $code     啟用碼
-     * @return boolean
+     * @return void
      */
-    public function activate(int $memberId, string $code): bool
+    public function insertThirdPartyInfo(array $data): bool
     {
-        // facebook 註冊不需要寄送啟用驗證通知，直接回傳 true
-
-        return true;
-    }
-
-    public function notify(array $data)
-    {
-        // facebook 註冊不需要寄送啟用驗證通知，直接回傳 true
+        // 這邊我也懶得實作啦，直接回傳 true 符合規範
 
         return true;
     }
