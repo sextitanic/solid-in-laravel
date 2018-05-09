@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MemberCreatePost;
-use App\Services\Account\Registration\RegistrationFactory;
 use App\Services\Account\MemberService;
+use App\Services\Account\Registration\Native\Base as NativeBase;
+use App\Services\Account\Registration\ThirdParty\Base as NativeThirdParty;
 use Log;
 
 class MemberController extends Controller
@@ -12,16 +13,19 @@ class MemberController extends Controller
     /**
      * 會員註冊，用 url 路徑來分是用 email 或手機註冊
      *
-     * @param Request $request
-     * @param string $type
+     * @param Request $request 傳入參數
+     * @param MemberService 負責處理 MemberController 的物件
+     * @param NativeBase    原生註冊的抽象類別
+     * @param string $type  註冊類別
      * @return void
      */
-    public function register(MemberCreatePost $request, MemberService $memberService, string $type)
-    {
+    public function register(
+        MemberCreatePost $request,
+        MemberService $memberService,
+        NativeBase $account,
+        string $type
+    ) {
         try {
-            // 依照傳進來的路徑來呼叫要使用的物件
-            $account = RegistrationFactory::create($type);
-
             $memberService->register($account, $request->input());
         } catch (\Throwable $e) {
             // 參數錯誤
