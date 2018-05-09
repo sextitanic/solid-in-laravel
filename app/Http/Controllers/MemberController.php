@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\MemberCreatePost;
 use App\Services\Account\Registration\RegistrationFactory;
+use App\Services\Account\MemberService;
 use Log;
-use DB;
 
 class MemberController extends Controller
 {
@@ -16,42 +16,29 @@ class MemberController extends Controller
      * @param string $type
      * @return void
      */
-    public function register(MemberCreatePost $request, string $type)
+    public function register(MemberCreatePost $request, MemberService $memberService, string $type)
     {
         try {
             // 依照傳進來的路徑來呼叫要使用的物件
             $account = RegistrationFactory::create($type);
-            
-            DB::beginTransaction();
-            // 會員註冊
-            $memberId = $account->register($request->input());
-            
-            // 如果順利註冊，就取得啟用驗證碼
-            $activateCode = $account->getActivateCode();
-            
-            // 寫入會員啟用資料表
-            $account->activate($memberId, $activateCode);
 
-            DB::commit();
+            $memberService->register($account, $request->input());
         } catch (\Throwable $e) {
-            DB::rollBack();
-
+            // 參數錯誤
             if ($e instanceof \App\Exceptions\InvalidParameterException) {
+                Log::error($e->getMessage());
                 return $this->response(422, $e->getMessage());
+            // 找不到物件
+            } elseif ($e instanceof \App\Exceptions\ClassNotExistsException) {
+                Log::error($e->getMessage());
+                return $this->response(501, $e->getMessage());
+            // 寄送通知錯誤，只記 log 不回傳錯誤
+            } elseif ($e instanceof \App\Exceptions\NotifyException) {
+                Log::error($e->getMessage());
+            } else {
+                Log::error($e->getMessage());
+                return $this->response(500, '系統錯誤');
             }
-
-            return $this->response(500, $e->getMessage());
-        }
-
-        try {
-            // 把啟用驗證碼 merge 進 Request 的物件裡
-            $request->merge([
-                'code' => $activateCode
-            ]);
-
-            $sendResult = $account->notify($request->input());
-        } catch (\Throwable $e) {
-            Log::info('傳送驗證通知失敗' . $e->getMessage());
         }
         
         return $this->response(200, '正常執行');
