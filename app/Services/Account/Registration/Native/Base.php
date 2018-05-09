@@ -4,18 +4,26 @@ namespace App\Services\Account\Registration\Native;
 
 use DB;
 use App\Services\Account\Registration\BaseRegistration;
+use App\Repositories\MemberRepository;
 use App\Repositories\MemberActivatorRepository;
 use App\Contracts\Account\Registration\Activator as ActivatorContract;
 use App\Contracts\Account\Registration\Notify as NotifyContract;
+use App\Services\Api\Internal\NotifyApi;
 
 abstract class Base extends BaseRegistration implements ActivatorContract, NotifyContract
 {
     protected $activator;
+    protected $notify;
+    protected $member;
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->activator = new MemberActivatorRepository();
+    public function __construct(
+        MemberActivatorRepository $activator,
+        NotifyApi $notify,
+        MemberRepository $member
+    ) {
+        $this->member = $member;
+        $this->activator = $activator;
+        $this->notify = $notify;
     }
 
     /**

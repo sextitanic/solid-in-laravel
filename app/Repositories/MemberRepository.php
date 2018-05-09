@@ -8,9 +8,9 @@ class MemberRepository
 {
     private $member;
 
-    public function __construct()
+    public function __construct(Member $member)
     {
-        $this->member = new Member();
+        $this->member = $member;
     }
 
     /**

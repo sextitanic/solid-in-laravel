@@ -11,6 +11,6 @@ class RegistrationFactory
         if (class_exists($class) === false) {
             throw new \App\Exceptions\ClassNotExistsException('找不到 ' . $class . ' 物件');
         }
-        return new $class();
+        return \App::make($class);
     }
 }

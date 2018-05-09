@@ -72,8 +72,6 @@ class Email extends Base
      */
     public function notify(array $data): bool
     {
-        $notify = new NotifyApi();
-
         $post = [
             'email' => $data['account'],
             'from' => 'service@test.com',
@@ -81,7 +79,7 @@ class Email extends Base
             'body' => view('notification.email.account.registration', $data)->render()
         ];
 
-        $result = $notify->post('/email', $post);
+        $result = $this->notify->post('/email', $post);
         
         if ($result['status'] != 200) {
             throw new \App\Exceptions\ApiException('寄送 email: ' . $data['account'] . ' 失敗');

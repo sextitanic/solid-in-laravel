@@ -2,19 +2,9 @@
 
 namespace App\Services\Account\Registration;
 
-use DB;
-use App\Repositories\MemberRepository;
-
 abstract class BaseRegistration
 {
     protected $type;
-    protected $member;
-    protected $activator;
-
-    public function __construct()
-    {
-        $this->member = new MemberRepository();
-    }
 
     protected function validate(array $input): bool
     {

@@ -8,9 +8,9 @@ class MemberActivatorRepository
 {
     private $activator;
 
-    public function __construct()
+    public function __construct(MemberActivator $activator)
     {
-        $this->activator = new MemberActivator();
+        $this->activator = $activator;
     }
 
     /**

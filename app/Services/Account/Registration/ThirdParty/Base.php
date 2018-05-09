@@ -4,9 +4,17 @@ namespace App\Services\Account\Registration\ThirdParty;
 
 use App\Services\Account\Registration\BaseRegistration;
 use App\Contracts\Account\Registration\ThirdPartyInfo as ThirdPartyInfoContract;
+use App\Repositories\MemberRepository;
 
 class Base extends BaseRegistration implements ThirdPartyInfo
 {
+    protected $member;
+
+    public function __construct(MemberRepository $member)
+    {
+        $this->member = $member;
+    }
+
     /**
      * 檢查不同註冊狀態的共用傳入參數是否正確
      *

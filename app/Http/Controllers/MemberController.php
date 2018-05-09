@@ -18,10 +18,10 @@ class MemberController extends Controller
      */
     public function register(MemberCreatePost $request, string $type)
     {
-        // 依照傳進來的路徑來呼叫要使用的物件
-        $account = RegistrationFactory::create($type);
-
         try {
+            // 依照傳進來的路徑來呼叫要使用的物件
+            $account = RegistrationFactory::create($type);
+            
             DB::beginTransaction();
             // 會員註冊
             $memberId = $account->register($request->input());

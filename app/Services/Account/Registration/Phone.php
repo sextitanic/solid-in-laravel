@@ -3,7 +3,6 @@
 namespace App\Services\Account\Registration;
 
 use Log;
-use App\Services\Api\Internal\NotifyApi;
 use App\Services\Account\Registration\Native\Base;
 
 class Phone extends Base
@@ -61,8 +60,6 @@ class Phone extends Base
      */
     public function notify(array $data): bool
     {
-        $notify = new NotifyApi();
-
         $post = [
             'phone' => $data['account'],
             'content' => view('notification.sms.account.registration', $data)->render()
