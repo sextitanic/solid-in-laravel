@@ -31,21 +31,21 @@ class MemberController extends Controller
             // 參數錯誤
             if ($e instanceof \App\Exceptions\InvalidParameterException) {
                 Log::error($e->getMessage());
-                return $this->response(422, $e->getMessage());
+                return api_response(422, $e->getMessage());
             // 找不到物件
             } elseif ($e instanceof \App\Exceptions\ClassNotExistsException) {
                 Log::error($e->getMessage());
-                return $this->response(501, $e->getMessage());
+                return api_response(501, $e->getMessage());
             // 寄送通知錯誤，只記 log 不回傳錯誤
             } elseif ($e instanceof \App\Exceptions\NotifyException) {
                 Log::error($e->getMessage());
             } else {
                 Log::error($e->getMessage());
-                return $this->response(500, '系統錯誤');
+                return api_response(501, '系統錯誤');
             }
         }
         
-        return $this->response(200, '正常執行');
+        return api_response(200, '正常執行');
     }
 
     /**
@@ -74,21 +74,12 @@ class MemberController extends Controller
             DB::rollBack();
 
             if ($e instanceof \App\Exceptions\InvalidParameterException) {
-                return $this->response(422, $e->getMessage());
+                return api_response(422, $e->getMessage());
             }
 
-            return $this->response(500, $e->getMessage());
+            return api_response(501, '系統錯誤');
         }
         
-        return $this->response(200, '正常執行');
-    }
-
-    private function response(int $code, string $message, array $data = [])
-    {
-        return response()->json([
-            'status' => $code,
-            'message' => $message,
-            'data' => $data
-        ]);
+        return api_response(200, '正常執行');
     }
 }
