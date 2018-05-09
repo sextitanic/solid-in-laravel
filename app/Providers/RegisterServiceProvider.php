@@ -10,8 +10,6 @@ use App\Services\Account\Registration\RegistrationFactory;
 
 class RegisterServiceProvider extends ServiceProvider
 {
-    protected $defer = true;
-
     /**
      * Bootstrap services.
      *
@@ -29,7 +27,7 @@ class RegisterServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(NativeBase::class, function ($app) {
+        $this->app->bind(NativeBase::class, function () {
             $type = substr(url()->full(), strrpos(url()->full(), '/') + 1);
             $class = RegistrationFactory::create($type);
 

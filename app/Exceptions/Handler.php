@@ -52,6 +52,8 @@ class Handler extends ExceptionHandler
         if ($e instanceof ValidationException) {
             $err = $e->errors();
             return $this->responseError(422, collect($err)->first()[0]);
+        } else {
+            return $this->responseError(500, '系統錯誤');
         }
         return parent::render($request, $e);
     }
