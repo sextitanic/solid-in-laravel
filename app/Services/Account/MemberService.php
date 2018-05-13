@@ -4,6 +4,7 @@ namespace App\Services\Account;
 
 use DB;
 use App\Services\Account\Registration\Native\Base as BaseNative;
+use Log;
 
 class MemberService
 {
