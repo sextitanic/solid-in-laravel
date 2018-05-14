@@ -1,59 +1,48 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+# SOLID 講解 in Laravel
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+> 公司內部教學
+> 會使用會員註冊的功能來講解 SOLID 觀念  
+> - 檢查傳入參數
+> - 寫入會員資料表
+> - 取得啟用帳戶驗證碼
+> - 寫入會員啟用資料表
+> - 寄送驗證通知
+> 
+> 會分成多個 Git 分支將此功能一一拆解  
+> 帶大家瞭解基本的觀念
 
-## About Laravel
+可搭配教學影片一起服用：[https://youtu.be/ZntHFYumuLA](https://youtu.be/ZntHFYumuLA "教學影片")
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+## 開發環境
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- 作業系統：Ubuntu 16.04 In Docker
+- 語言：PHP 7.2.3
+- Framework：Laravel 5.6.12
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications.
+## 大綱
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of any modern web application framework, making it a breeze to get started learning the framework.
-
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 1100 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell):
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Pulse Storm](http://www.pulsestorm.net/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- 一般常見不推薦的程式
+  - 將程式都寫同一支程式裡 - 01_bad_code
+- S：單一職責 (SRP：Single Responsibility Principle)
+  - 一個類別負責一件事情
+    - Service：負責處理商業邏輯 - 02_1_service_layer
+    - Repository：負責處理資料表操作邏輯 - 02_2_repository_layer
+    - Presenter：負責處理 view 顯示邏輯 - 02_3_presenter_layer
+    - Laravel Form Request Validation - 02_4_form_request_validation
+- O：開放/封閉原則 (OCP：Open/closed principle)
+  - 開放程式擴充功能，封閉修改程式
+    - 使用靜態工廠模式：03_open_closed_principle
+- L：里氏替換原則 (LSP：Liskov Substitution Principle)
+  - 擴充父類別功能而不是修改它：04_liskov_substitution_principle
+- I：介面隔離原則 (ISP：Interface Segregation Principles)
+  - 類別不需要實作它不需要用到的程式
+    - 錯誤的類別，空實作過多不需要的方法：05_1_wrong_interface_segregation_principle
+    - 將各種方法切成不同方法讓程式依需求實作：05_2_interface_segregation_principle
+- D：依賴反轉原則 (DIP：Dependency Inversion Principle)
+  - 高階模組不應該依賴低階模組，兩者都應該依賴抽象
+  - 抽象不依賴細節，細節要依賴抽象
+    - 建構子注入：06_1_constructor_injection
+    - 依賴注入：06_2_dependency_inversion
+    - Laravel Service Provider：06_3_laravel_service_provider
+- Helper：建立自己的 helper 函式，並且自動載入
+  - 07_helper
